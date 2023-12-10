@@ -73,6 +73,7 @@ svg {
     font-size: 20px;
     color: gray;
     vertical-align: middle;
+    margin-bottom: 10px;
 }
 .content {
     margin: 0 20px;
