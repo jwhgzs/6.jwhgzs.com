@@ -1,0 +1,155 @@
+<!doctype html>
+<html>
+    <head>
+        <title>6 平台</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta charset="utf-8">
+    </head>
+    
+    <body>
+        <div id="app" class="app">
+            <div id="container" class="container">
+                <div id="box1" class="box">
+                    <center>
+                        <div class="title">
+                            6 平台
+                        </div>
+                        <div class="subtitle">
+                            © 谭镇洋
+                        </div>
+                        <div id="admin" style="display: none;">
+                            <button id="admin1" onclick="javascript: admin('banned');"></button>
+                            <button id="admin2" onclick="javascript: admin('refresh');"></button>
+                            <button id="" onclick="javascript: setJuan(1);">随机设置内卷题目</button>
+                            <button id="" onclick="javascript: setJuan();">设置内卷题目</button>
+                            <button id="admin3" onclick="javascript: admin('juan');"></button>
+                        </div>
+                    </center>
+                    <center class="content">
+                        <button onclick="javascript: refreshHome();">🔄 刷新</button>
+                        <button onclick="javascript: go('https://www.baidu.com');">
+                            <span class="tag">搜索</span>🔍 百度搜索
+                        </button>
+                        <button onclick="javascript: go('https://www.jwhgzs.com');">
+                            <span class="tag">工具</span>🎇 九尾狐工作室官网
+                        </button>
+                        <button onclick="javascript: go('https://www.cstimer.net');">
+                            <span class="tag">工具</span>📱 魔方计时器
+                        </button>
+                        <button onclick="javascript: go('https://www.bilibili.com');">
+                            <span class="tag">视频</span>🅱️ 哔哩哔哩
+                        </button>
+                    </center>
+                </div>
+                <div id="box2" class="box2" style="display: none;">
+                    <center class="content">
+                        <button onclick="javascript: refresh();">🔄 刷新</button>
+                        <button onclick="javascript: gohome();">↩️ 返回主页</button>
+                        <span id="url" class="subtitle scroll"></span>
+                    </center>
+                </div>
+            </div>
+            <iframe id="iframe" class="iframe" src="" onload="updateUrl()" security="restricted" sandbox="allow-same-origin allow-scripts allow-forms"></iframe>
+        </div>
+        
+        <script src="/public/common.requirer.js"></script>
+        <script>
+            const iframeSizeAdapt = () => {
+                t('#iframe').style.height = (window.innerHeight - t('#container').offsetHeight - 8 * 2) + 'px'
+            }
+            window.onresize = iframeSizeAdapt
+            iframeSizeAdapt()
+            
+            let status
+            function updateUrl() {
+                let nurl = t('#iframe').src
+                let url = new URL(nurl)
+                t('#url').innerHTML = `${url.protocol}//<strong>${url.host}</strong>${url.pathname}`
+                iframeSizeAdapt()
+            }
+            
+            function go(url) {
+                t('#box1').style.display = 'none'
+                t('#box2').style.display = ''
+                iframeSizeAdapt()
+                let u = new URL(url)
+                window.name = u.host
+                t('#iframe').src = url
+            }
+            function gohome() {
+                t('#box1').style.display = ''
+                t('#box2').style.display = 'none'
+                iframeSizeAdapt()
+                t('#iframe').src = ''
+            }
+            function refresh() {
+                let url = t('#iframe').src
+                t('#iframe').src = ''
+                t('#iframe').src = url
+            }
+            function refreshHome() {
+                window.location.reload()
+            }
+            function admin(name) {
+                g('/api/makeStatus.php?name=' + name)
+            }
+            function setJuan(rand = false) {
+                if (rand) {
+                    let r1 = random(10, 20), r2 = random(10, 30)
+                    g('/api/setStatus.php?name=juan_title&val=' + encodeURIComponent(r1 + '✖' + r2 + '=?'))
+                    g('/api/setStatus.php?name=juan_ans&val=' + encodeURIComponent(r1 * r2))
+                    alert('OK！')
+                    return
+                }
+                
+                let title = prompt('请输入内卷题目：', status.juan_title),
+                    ans = prompt('请输入题目答案：', status.juan_ans)
+                if (! title || ! ans) return
+                g('/api/setStatus.php?name=juan_title&val=' + encodeURIComponent(title))
+                g('/api/setStatus.php?name=juan_ans&val=' + encodeURIComponent(ans))
+            }
+            
+            const isAdmin = getParam('admin')
+            if (isAdmin) {
+                t('#admin').style.display = ''
+            }
+            let thread = async () => {
+                status = await g('/data/status.json', 'json')
+                
+                if (isAdmin) {
+                    t('#admin1').innerHTML = '' + status.banned == 1 ? 'banned' : 'not-banned'
+                    t('#admin2').innerHTML = '' + status.refresh == 1 ? 'refreshing' : 'not-refreshing'
+                    t('#admin3').innerHTML = '' + status.juan == 1 ? '内卷ing' : 'not-内卷ing'
+                    return
+                }
+                
+                if (status.banned == 1) {
+                    alert('管理员暂时禁用了平台！请联系管理员解封。\n\n若确定已解封，点击“确定”即可继续使用。\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n')
+                }
+                else if (status.refresh == 1) {
+                    alert('管理员发布了强制刷新命令。点击“确定”以继续。')
+                    await g('/api/makeStatus.php?name=refresh')
+                    refreshHome()
+                }
+                else if (status.juan == 1) {
+                    let input = prompt('恭喜你！若答对以下这道题可以获得继续使用的机会！\n\n' + status.juan_title)
+                    if (input == status.juan_ans) {
+                        if (random(0, 1) == 0) {
+                            alert('回答正确！运气真好！获得继续使用的机会……')
+                            await g('/api/makeStatus.php?name=juan')
+                            refreshHome()
+                        }
+                        else {
+                            alert('回答正确！可惜运气差点……\n\n点击“确定”尝试重新答题！')
+                        }
+                    }
+                    else {
+                        alert('错了哦~\n\n点击“确定”尝试重新答题！')
+                    }
+                }
+            }
+            setInterval(thread, 1000)
+            thread()
+        </script>
+    </body>
+</html>

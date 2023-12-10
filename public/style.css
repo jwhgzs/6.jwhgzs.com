@@ -1,0 +1,101 @@
+#input {
+    margin-top: 50px;
+}
+textarea, button {
+    font-size: 25px;
+}
+textarea {
+    padding: 10px;
+    border-radius: 10px;
+    border: 1px solid #bbb;
+}
+button {
+    padding: 10px;
+    border-radius: 10px;
+    border: 1px solid #bbb;
+    background-color: unset !important;
+    margin: 5px;
+    margin-left: 0;
+    vertical-align: middle;
+}
+button>* {
+    vertical-align: middle;
+}
+button:hover {
+    background-color: #eee !important;
+}
+button:active {
+    background-color: #ddd !important;
+}
+svg {
+    display: inline-block !important;
+    position: relative !important;
+    width: inherit;
+    max-width: 100%;
+    height: auto;
+    outline: none;
+}
+.app {
+    height: 100vh;
+}
+.container {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    justify-content: center;
+    align-items: center;
+}
+.box {
+    width: calc(100% - 20px * 2);
+    max-width: 600px;
+    border-radius: 10px;
+    border: 2px solid #bbb;
+    padding: 20px;
+    overflow: hidden;
+}
+.box2 {
+    width: calc(100% - 10px * 2);
+    max-width: 600px;
+    border-radius: 10px;
+    border: 2px solid #bbb;
+    padding: 10px;
+    margin-bottom: 10px;
+    overflow: hidden;
+}
+.title {
+    font-size: 60px;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+.subtitle {
+    display: inline-block;
+    max-width: 10rem;
+    font-size: 20px;
+    color: gray;
+    vertical-align: middle;
+}
+.content {
+    margin: 0 20px;
+}
+.iframe {
+    width: 100%;
+    border: none;
+}
+.scroll {
+    overflow-x: auto;
+}
+.tag {
+    display: inline-block;
+    max-width: 1rem;
+    margin-right: 10px;
+    font-size: 50%;
+    font-weight: bold;
+    color: gray;
+}
+.good_price {
+    color: gray;
+}
+.good_count {
+    font-size: 50%;
+    color: gray;
+}
