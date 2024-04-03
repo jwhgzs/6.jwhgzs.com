@@ -4,6 +4,7 @@
         <title>鸭子平台</title>
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta charset="utf-8">
+        <meta http-equiv="refresh" content="url=https://www.songshuai.com">
     </head>
     
     <body>
@@ -39,6 +40,9 @@
                         <button onclick="javascript: go('https://www.bilibili.com');">
                             <span class="tag">视频</span>🅱️ 哔哩哔哩
                         </button>
+                        <button onclick="javascript: go('https://www.171xue.cn');">
+                            <span class="tag">测试</span>🐅 Tiger
+                        </button>
                     </center>
                 </div>
                 <div id="box2" class="box2" style="display: none;">
@@ -52,7 +56,7 @@
             <iframe id="iframe" class="iframe" src="" onload="updateUrl()" security="restricted" sandbox="allow-same-origin allow-scripts allow-forms"></iframe>
         </div>
         
-        <script src="/public/common.requirer.js"></script>
+        <script src="/public/common.requirer.js?v=1"></script>
         <script>
             const iframeSizeAdapt = () => {
                 t('#iframe').style.height = (window.innerHeight - t('#container').offsetHeight - 8 * 2) + 'px'
@@ -72,8 +76,6 @@
                 t('#box1').style.display = 'none'
                 t('#box2').style.display = ''
                 iframeSizeAdapt()
-                let u = new URL(url)
-                window.name = u.host
                 t('#iframe').src = url
             }
             function gohome() {
@@ -148,7 +150,7 @@
                     }
                 }
             }
-            setInterval(thread, 1000)
+            // setInterval(thread, 1000)
             thread()
         </script>
     </body>
